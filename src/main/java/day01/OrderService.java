@@ -44,4 +44,22 @@ public class OrderService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
+    public List<Order> getOrdersWhichContainsProductWithCategory(String category) {
+        return orders.stream()
+                .filter(order -> order.getProducts().stream()
+                        .anyMatch(product -> product.category().equals(category)))
+                .toList();
+    }
+
+    public List<Order> getOrdersWhichContainsProductWithCategoryV2(String category) {
+        return orders.stream()
+                .filter(order -> isProductWithCategory(order.getProducts(),category))
+                .toList();
+    }
+
+    private boolean isProductWithCategory(List<Product> products, String category) {
+        return products.stream()
+                .anyMatch(product -> product.category().equals(category));
+    }
+
 }

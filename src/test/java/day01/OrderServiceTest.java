@@ -83,4 +83,14 @@ class OrderServiceTest {
         var osWithEmptyProductList = new OrderService();
         assertThrows(IllegalArgumentException.class, osWithEmptyProductList::getOrderWithMostProduct);
     }
+
+    @Test
+    void getOrdersWhichContainsProductWithCategory() {
+        assertEquals(3, orderService.getOrdersWhichContainsProductWithCategory("Book").size());
+    }
+
+    @Test
+    void getOrdersWhichContainsProductWithCategoryV2() {
+        assertEquals(3, orderService.getOrdersWhichContainsProductWithCategoryV2("Book").size());
+    }
 }
