@@ -13,7 +13,7 @@ public class PairFinder {
                         o -> o,
                         counting()))
                 .values().stream()
-                .mapToLong(aLong -> aLong / 2)
+                .mapToLong(count -> count / 2)
                 .sum();
     }
 
