@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.*;
 
 public class Streets {
 
-    public Map<String, List<Integer>> getFromFile(Path path) throws IOException {
+    public Map<String, List<Integer>> getSoldHouses(Path path) throws IOException {
         return Files.readAllLines(path)
                 .stream()
                 .map(line -> line.split(" "))
@@ -19,12 +19,11 @@ public class Streets {
                         data -> data[0],
                         TreeMap::new,
                         collectingAndThen(
-                                mapping(
-                                        data -> Integer.parseInt(data[1]),
+                                mapping(data -> Integer.parseInt(data[1]),
                                         toList()),
-                                integers -> {
+                                list -> {
                                     int[] zeroOne = new int[2];
-                                    return integers.stream()
+                                    return list.stream()
                                             .map(integer -> integer == 0 ? ++zeroOne[0] * 2 : ++zeroOne[1] * 2 - 1)
                                             .toList();
                                 }
