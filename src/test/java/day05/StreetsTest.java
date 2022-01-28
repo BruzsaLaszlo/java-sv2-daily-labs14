@@ -14,14 +14,14 @@ class StreetsTest {
     Path path = Path.of("src/test/resources/streets.txt");
 
     @Test
-    void getSoldHouse() {
+    void getSoldHouses() {
 
         var expected = Map.of(
                 "Kossuth", List.of(2,4,1,3,5,7),
                 "Petofi", List.of(1,2,4,3,6)
         );
 
-        assertEquals(expected, streets.getSoldHouse(path));
+        assertEquals(expected, streets.getSoldHouses(path));
 
     }
 }

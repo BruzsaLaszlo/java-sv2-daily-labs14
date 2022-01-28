@@ -10,8 +10,9 @@ import java.util.TreeMap;
 
 public class Streets {
 
-    public Map<String, List<Integer>> getSoldHouse(Path path) {
-        var map = getMap(path);
+
+    public Map<String, List<Integer>> getSoldHouses(Path path) {
+        var map = getFromFile(path);
         map.entrySet()
                 .forEach(entry -> entry.setValue(getNumbersList(entry.getValue())));
         return map;
@@ -27,20 +28,17 @@ public class Streets {
         return result;
     }
 
-    private Map<String, List<Integer>> getMap(Path path) {
-        Map<String, List<Integer>> map = new TreeMap<>();
-        getLinesFromFile(path)
-                .forEach(line -> {
-                    var data = line.split(" ");
-                    int num = Integer.parseInt(data[1]);
-                    map.computeIfAbsent(data[0], s -> new ArrayList<>()).add(num);
-                });
-        return map;
-    }
-
-    private List<String> getLinesFromFile(Path path) {
+    private Map<String, List<Integer>> getFromFile(Path path) {
         try {
-            return Files.readAllLines(path);
+            Map<String, List<Integer>> map = new TreeMap<>();
+            Files.readAllLines(path)
+                    .forEach(line -> {
+                        var data = line.split(" ");
+                        int num = Integer.parseInt(data[1]);
+                        map.computeIfAbsent(data[0], s -> new ArrayList<>())
+                                .add(num);
+                    });
+            return map;
         } catch (IOException e) {
             throw new IllegalArgumentException("file not found " + path);
         }
