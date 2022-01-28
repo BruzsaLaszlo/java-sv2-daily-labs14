@@ -3,42 +3,39 @@ package day05;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static java.util.stream.Collectors.*;
+
 public class Streets {
 
 
-    public Map<String, List<Integer>> getSoldHouses(Path path) {
+    public Map<String, List<Integer>> getSoldHousesByStreets(Path path) {
         var map = getFromFile(path);
-        map.entrySet()
-                .forEach(entry -> entry.setValue(getNumbersList(entry.getValue())));
+        map.entrySet().forEach(entry -> entry.setValue(getTranformedList(entry.getValue())));
         return map;
     }
 
-    private List<Integer> getNumbersList(List<Integer> value) {
-        List<Integer> result = new ArrayList<>();
-        int zero = 0;
-        int one = 0;
-        for (Integer integer : value) {
-            result.add(integer == 0 ? ++zero * 2 : ++one * 2 - 1);
-        }
-        return result;
+    private List<Integer> getTranformedList(List<Integer> value) {
+        int[] zeroOne = new int[2];
+        return value.stream()
+                .map(integer -> integer == 0 ? ++zeroOne[0] * 2 : ++zeroOne[1] * 2 - 1)
+                .toList();
     }
 
     private Map<String, List<Integer>> getFromFile(Path path) {
         try {
-            Map<String, List<Integer>> map = new TreeMap<>();
-            Files.readAllLines(path)
-                    .forEach(line -> {
-                        var data = line.split(" ");
-                        int num = Integer.parseInt(data[1]);
-                        map.computeIfAbsent(data[0], s -> new ArrayList<>())
-                                .add(num);
-                    });
-            return map;
+            return Files.readAllLines(path)
+                    .stream()
+                    .map(line -> line.split(" "))
+                    .collect(groupingBy(
+                            data -> data[0],
+                            TreeMap::new,
+                            mapping(data -> Integer.parseInt(data[1]),
+                                    toList())
+                    ));
         } catch (IOException e) {
             throw new IllegalArgumentException("file not found " + path);
         }
